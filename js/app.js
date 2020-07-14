@@ -61,3 +61,16 @@ function toggle() {
 		document.getElementById("player").play();
 	}
 }
+
+function parse(url) {
+	var xhr = new XMLHttpRequest();
+	var url = "https://coorsproxyunlimited.herokuapp.com/" + url;
+	xhr.open("GET", url)
+	xhr.send();
+	xhr.onload=function() {
+		var d = xhr.responseText;
+		var reader = new M3U8FileParser();
+		reader.read(d);
+		console.log(reader.getResult())
+	}
+}
