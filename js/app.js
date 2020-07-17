@@ -1,11 +1,15 @@
-const p = document.getElementById("player");
-if (Hls.isSupported()) {
-	var hls = new Hls();
-	hls.loadSource("https://weather-lh.akamaihd.net/i/twc_1@92006/master.m3u8");
-	hls.attachMedia(p);
-	hls.on(Hls.Events.MANIFEST_PARSED,function(){
-		p.play();
-	});
+if (localStorage.getItem("currentStream")) {
+	const p = document.getElementById("player");
+	if (Hls.isSupported()) {
+		var hls = new Hls();
+		hls.loadSource("https://weather-lh.akamaihd.net/i/twc_1@92006/master.m3u8");
+		hls.attachMedia(p);
+		hls.on(Hls.Events.MANIFEST_PARSED,function(){
+			p.play();
+		});
+	}
+} else {
+	start();
 }
 
 p.addEventListener("loadeddata", function() {
@@ -25,6 +29,10 @@ document.addEventListener("keydown",function(event) {
 		fullscreen();
 	}
 })
+
+function start() {
+	
+}
 
 function fullscreen() {
 	var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
