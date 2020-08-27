@@ -13,11 +13,23 @@ if (localStorage.getItem("read")) {
 
 document.getElementById("player").addEventListener("loadeddata", function() {
 	document.getElementById("load").style.display = "none";
+	document.getElementById("error").style.display = "none";
 	document.getElementById("player").play();
 })
 
 document.getElementById("player").addEventListener("waiting", function() {
-	document.getElementById("load").style.display = "";
+	document.getElementById("load").style.display = "block";
+	document.getElementById("l").innerHTML = "HTML5 Player is loading the data...";
+})
+
+document.getElementById("player").addEventListener("canplay", function() {
+	document.getElementById("load").style.display = "none";
+})
+
+document.getElementById("player").addEventListener("error", function(error) {
+	console.log(error)
+	document.getElementById("error").style.display = "block";
+	document.getElementById("err").innerHTML = error.code;
 })
 
 document.addEventListener("keydown",function(event) {
@@ -97,8 +109,9 @@ function parse(url) {
 			var chip = document.createElement("DIV");
 			chip.classList.add("chip");
 			chip.id = btoa(data[c].url);
+			chip.title = data[c].inf.title.toString();
 			chip.onclick = function () {
-				load(atob(this.id), data[c].inf.title);
+				load(atob(this.id), this.title);
 			}
 			var img = document.createElement("IMG");
 			img.src = data[c].inf.tvgLogo;
@@ -106,7 +119,7 @@ function parse(url) {
 			chip.appendChild(img);
 			var div = document.createElement("DIV");
 			var tit = document.createElement("H2");
-			tit.innerHTML = 
+			tit.innerHTML = data[c].inf.title;
 			chip.appendChild(div);
 			document.getElementById("streamContainer").appendChild(chip);
 		}
@@ -116,6 +129,8 @@ function parse(url) {
 }
 
 function parseFromLs(data) {
+	document.getElementById("load").style.display = "block";
+	document.getElementById("l").innerHTML = "Please wait...";
 	setTimeout(function () {
 		var reader = new M3U8FileParser();
 		reader.read(data);
@@ -125,8 +140,9 @@ function parseFromLs(data) {
 			var chip = document.createElement("DIV");
 			chip.classList.add("chip");
 			chip.id = btoa(d[c].url);
+			chip.title = d[c].inf.title.toString();
 			chip.onclick = function () {
-				load(atob(this.id), d[c].inf.title);
+				load(atob(this.id), this.title);
 			}
 			var img = document.createElement("IMG");
 			img.src = d[c].inf.tvgLogo;
@@ -142,25 +158,52 @@ function parseFromLs(data) {
 			chip.appendChild(div);
 			document.getElementById("streamContainer").appendChild(chip);
 		}
-		load(localStorage.getItem("currentStream"))
+		load(localStorage.getItem("currentStream"), localStorage.getItem("streamTitle"));
 	}, 750)
 }
 
 function load(url, tit) {
+	document.getElementById("error").style.display = "none";
+	document.getElementById("load").style.display = "block";
+	document.getElementById("l").innerHTML = "Please wait...";
 	setTimeout(function() {
-		document.getElementById("l").innerHTML = "Parsing stream...";
-		var hls = new Hls();
-		var p = document.getElementById("player");
-		hls.loadSource(url);
-		hls.attachMedia(p);
-		hls.on(Hls.Events.MANIFEST_PARSED,function(){
+		if (window.hls) {hls.destroy();}
+		window.hls = new Hls();
+		hls.on(Hls.Events.MANIFEST_PARSED, function(){
+			document.getElementById("error").style.display = "none";
 			if (tit) {
 				document.title = tit + " | Wildflower"; 
 				localStorage.setItem("streamTitle", tit);
 			}
-			document.getElementById("l").innerHTML = "Loading stream...";
+			document.getElementById("l").innerHTML = "Loading content (manifest parsed)...";
 			localStorage.setItem("currentStream", url);
 		});
+		hls.on(Hls.Events.MEDIA_ATTACHING, function() {
+			document.getElementById("l").innerHTML = "Attaching to player...";
+		});
+		hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+			document.getElementById("l").innerHTML = "Loading content (media attached)...";
+		})
+		hls.on(Hls.Events.ERROR, function (err) {
+			if (document.getElementById("player").paused == true) {
+				if (err == "hlsError") {
+					document.getElementById("load").style.display = "none";
+					document.getElementById("error").style.display = "block";
+					document.getElementById("err").innerHTML = "The stream could not be loaded.";
+				} else {
+					document.getElementById("load").style.display = "none";
+					document.getElementById("error").style.display = "block";
+					document.getElementById("err").innerHTML = err;
+				}
+			}
+		});
+		var p = document.getElementById("player");
+		document.getElementById("l").innerHTML = "Stopping stream...";
+		hls.loadSource(url);
+		document.getElementById("l").innerHTML = "Loading current stream...";
+		hls.startLoad();
+		document.getElementById("l").innerHTML = "Starting stream...";
+		hls.attachMedia(p);
 	}, 750);
 }
 

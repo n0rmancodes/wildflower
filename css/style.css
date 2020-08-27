@@ -35,7 +35,7 @@ video {
 .spinner div {
 	width: 18px;
 	height: 18px;
-	background-color: #333;
+	background-color: #fff;
 
 	border-radius: 100%;
 	display: inline-block;
@@ -82,9 +82,19 @@ video {
 	padding-right:1%;
 }
 
+.sidebar h2 {
+	margin-top:3%;
+	margin-bottom:0;
+}
+
+.sidebar p {
+	margin-bottom:3%;
+	margin-top:0;
+}
+
 #streamContainer {
 	overflow-y:scroll;
-	height:90%;
+	height:85%;
 }
 
 #streamContainer .chip {
@@ -100,6 +110,7 @@ video {
 	width:45%;
 	height:100%;
 	object-fit:fill;
+	background:grey;
 }
 
 #streamContainer .chip div {

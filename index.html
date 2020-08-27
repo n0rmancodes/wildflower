@@ -24,8 +24,16 @@
 				<button onclick="parse('https://iptv-org.github.io/iptv/countries/us.m3u')">Get Started!</button>
 			</div>
 		</div>
+		<div id="error" class="overlay">
+			<div class="innerOverlay">
+				<h2>Error:</h2>
+				<p>There was an error loading this stream. Try again or try a different stream.</p>
+				<p>Error type: <span id="err"></span></p>
+			</div>
+		</div>
 		<div class="sidebar" id="s">
 			<h2>Streams</h2>
+			<p>No content is hosted here. All of this data is from the internet. </p>
 			<div id="streamContainer"></div>
 		</div>
 		<video id="player" onclick="toggle()"></video>
