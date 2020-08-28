@@ -172,6 +172,7 @@ function load(url, tit) {
 		hls.on(Hls.Events.MANIFEST_PARSED, function(){
 			document.getElementById("error").style.display = "none";
 			if (tit) {
+				if (tit == "Custom") {document.getElementById("custom").value = "";}
 				document.title = tit + " | Wildflower"; 
 				localStorage.setItem("streamTitle", tit);
 			}

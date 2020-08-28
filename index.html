@@ -35,6 +35,7 @@
 			<h2>Streams</h2>
 			<p>No content is hosted here. All of this data is from the internet. </p>
 			<div id="streamContainer"></div>
+			<input id="custom"><button onclick="load(document.getElementById('custom').value, 'Custom');">Stream this URL</button><button onclick="parse(document.getElementById('custom').value, 'Custom');">Parse this URL</button>
 		</div>
 		<video id="player" onclick="toggle()"></video>
 		<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
