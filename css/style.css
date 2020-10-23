@@ -11,6 +11,7 @@ video {
 	height:100%;
 	width:100%;
 	background:black;
+	transition:margin-left 0.5s;
 }
 
 .overlay {
@@ -20,9 +21,11 @@ video {
 	height:100%;
 	background:#000000;
 	opacity:0.5;
+	transition:margin-left 0.5s;
 }
 
 .innerOverlay {
+	transition:margin-left 0.5s;
 	text-align:center;
 }
 

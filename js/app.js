@@ -212,7 +212,21 @@ function open() {
 	var s = document.getElementById("s").currentStyle || window.getComputedStyle(document.getElementById("s"));
 	if (s.marginLeft.toString() == "0px") {
 		document.getElementById("s").style = "margin-left: -37%;";
+		document.getElementById("player").style = "margin-left:0%;";
+		document.getElementById("load").style = "margin-left:0%;";
+		if (document.getElementById("error").style.display == "block") {
+			document.getElementById("error").style = "margin-left:0%;display:block;";
+		} else {
+			document.getElementById("error").style = "margin-left:0%;";
+		}
 	} else {
 		document.getElementById("s").style = "margin-left: 0%;";
+		document.getElementById("player").style = "margin-left:37%;";
+		document.getElementById("load").style = "margin-left:37%;";
+		if (document.getElementById("error").style.display == "block") {
+			document.getElementById("error").style = "margin-left:37%;display:block;";
+		} else {
+			document.getElementById("error").style = "margin-left:37%;";
+		}
 	}
 }
