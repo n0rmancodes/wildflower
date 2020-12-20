@@ -27,7 +27,6 @@ document.getElementById("player").addEventListener("canplay", function() {
 })
 
 document.getElementById("player").addEventListener("error", function(error) {
-	console.log(error)
 	document.getElementById("error").style.display = "block";
 	document.getElementById("err").innerHTML = error.code;
 })
